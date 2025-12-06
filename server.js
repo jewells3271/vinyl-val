@@ -121,13 +121,13 @@ app.post('/api/tts', async (req, res) => {
                 input: { text: cleanText },
                 voice: {
                     languageCode: 'en-US',
-                    name: 'en-US-Neural2-D',  // High-quality male voice
+                    name: 'en-US-Neural2-J',  // Algenib male voice
                     ssmlGender: 'MALE'
                 },
                 audioConfig: {
                     audioEncoding: 'MP3',
-                    speakingRate: 0.9,  // Slower for DJ vibe
-                    pitch: -2.0  // Lower pitch
+                    speakingRate: 0.9,
+                    pitch: -2.0
                 }
             })
         });
