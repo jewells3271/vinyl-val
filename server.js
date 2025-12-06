@@ -121,7 +121,7 @@ app.post('/api/tts', async (req, res) => {
                 input: { text: cleanText },
                 voice: {
                     languageCode: 'en-US',
-                    name: 'en-US-Chirp3-HD-Algeiba',
+                    name: 'en-US-Chirp3-HD-Charon',
                     ssmlGender: 'MALE'
                 },
                 audioConfig: {
