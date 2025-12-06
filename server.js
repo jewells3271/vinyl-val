@@ -121,13 +121,14 @@ app.post('/api/tts', async (req, res) => {
                 input: { text: cleanText },
                 voice: {
                     languageCode: 'en-US',
-                    name: 'en-US-Neural2-J',  // Algenib male voice
+                    name: 'en-US-Chirp3-HD-Algieba-M',
                     ssmlGender: 'MALE'
                 },
                 audioConfig: {
-                    audioEncoding: 'MP3',
-                    speakingRate: 0.9,
-                    pitch: -2.0
+                    audioEncoding: 'LINEAR16',
+                    sampleRateHertz: 44100,
+                    speakingRate: 1.25,
+                    volumeGainDb: 16
                 }
             })
         });
