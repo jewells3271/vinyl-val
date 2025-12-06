@@ -96,7 +96,7 @@ app.post('/api/chat', async (req, res) => {
     }
 });
 
-// Google Gemini 2.5 Pro TTS endpoint
+// Google Cloud Text-to-Speech endpoint
 app.post('/api/tts', async (req, res) => {
     try {
         const { text } = req.body;
@@ -105,18 +105,48 @@ app.post('/api/tts', async (req, res) => {
             return res.status(400).json({ error: 'Text is required' });
         }
 
-        // Clean text for better speech
+        // Clean text for speech
         const cleanText = text
             .replace(/\*\*/g, '')
             .replace(/\*/g, '')
             .replace(/_/g, '');
 
-        // For now, we'll use Web Speech API client-side
-        // Google Gemini doesn't have direct TTS yet, so we return text for client to speak
+        // Call Google Cloud Text-to-Speech API
+        const response = await fetch(`https://texttospeech.googleapis.com/v1/text:synthesize?key=${process.env.GOOGLE_API_KEY}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                input: { text: cleanText },
+                voice: {
+                    languageCode: 'en-US',
+                    name: 'en-US-Neural2-D',  // High-quality male voice
+                    ssmlGender: 'MALE'
+                },
+                audioConfig: {
+                    audioEncoding: 'MP3',
+                    speakingRate: 0.9,  // Slower for DJ vibe
+                    pitch: -2.0  // Lower pitch
+                }
+            })
+        });
+
+        if (!response.ok) {
+            const error = await response.text();
+            console.error('Google TTS Error:', error);
+            return res.status(response.status).json({
+                error: 'Failed to generate speech',
+                details: error
+            });
+        }
+
+        const data = await response.json();
+
+        // Return base64 audio
         res.json({
             success: true,
-            text: cleanText,
-            useWebSpeech: true  // Signal frontend to use Web Speech API
+            audioContent: data.audioContent
         });
 
     } catch (error) {
